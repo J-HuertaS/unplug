@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Unplug logo">
+  
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="#1E5A44"></rect>
+  
+  <circle cx="430" cy="96" r="120" fill="#FFFFFF" opacity="0.05"></circle>
+  <circle cx="90" cy="440" r="130" fill="#FFFFFF" opacity="0.05"></circle>
+
+  
+  <path d="M336 150 C336 262 262 336 150 336 C150 224 224 150 336 150 Z" fill="#8FD3A8"></path>
+  
+  <path d="M300 186 C300 268 246 322 164 322 C176 240 218 198 300 186 Z" fill="#B6E6C7" opacity="0.55"></path>
+
+  
+  <path d="M318 168 C258 228 214 268 190 314 C176 342 172 372 176 402" stroke="#134634" stroke-width="22" stroke-linecap="round" fill="none"></path>
+
+  
+  <rect x="150" y="392" width="18" height="52" rx="9" fill="#C97C54" transform="rotate(-14 159 418)"></rect>
+  <rect x="188" y="392" width="18" height="52" rx="9" fill="#C97C54" transform="rotate(-14 197 418)"></rect>
+
+  
+  <circle cx="336" cy="150" r="20" fill="#E6A94E"></circle>
+</svg>
