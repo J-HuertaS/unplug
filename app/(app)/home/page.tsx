@@ -29,7 +29,7 @@ export default async function HomePage() {
   if (!profileRow) return null;
   const profile = profileRow as Profile;
 
-  const [from] = lastNDayKeys(7);
+  const [from] = lastNDayKeys(7, profile.timezone);
   const { data: logsRaw } = await supabase
     .from("daily_logs")
     .select("*")
@@ -37,7 +37,7 @@ export default async function HomePage() {
     .gte("log_date", from);
   const logs = (logsRaw ?? []) as DailyLog[];
 
-  const week = buildWeek(logs, 7);
+  const week = buildWeek(logs, profile.timezone, 7);
   const todayEntry = week[week.length - 1];
   const yesterdayEntry = week[week.length - 2];
 
@@ -50,8 +50,13 @@ export default async function HomePage() {
   const scale =
     Math.max(profile.baseline_hours, ...week.map((d) => d.log?.hours_reported ?? 0)) + 0.4;
 
-  const today = new Date();
-  const hour = today.getHours();
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      hourCycle: "h23",
+      timeZone: profile.timezone,
+    }).format(new Date()),
+  );
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
   const displayName = profile.user_name ?? user.email?.split("@")[0] ?? "there";
 

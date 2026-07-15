@@ -25,7 +25,7 @@ export default async function StatsPage() {
   if (!profileRow) return null;
   const profile = profileRow as Profile;
 
-  const [from] = lastNDayKeys(7);
+  const [from] = lastNDayKeys(7, profile.timezone);
   const { data: logsRaw } = await supabase
     .from("daily_logs")
     .select("*")
@@ -33,7 +33,7 @@ export default async function StatsPage() {
     .gte("log_date", from);
   const logs = (logsRaw ?? []) as DailyLog[];
 
-  const week = buildWeek(logs, 7);
+  const week = buildWeek(logs, profile.timezone, 7);
   const reductionPct = avgReductionPct(week, profile.baseline_hours);
   const freed = hoursSavedThisWeek(week, profile.baseline_hours);
   const recs = recommendationsFor(freed);

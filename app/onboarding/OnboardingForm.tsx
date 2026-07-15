@@ -42,6 +42,7 @@ export function OnboardingForm() {
         daily_goal_hours: finalGoal,
         companion_type: finalCompanion,
         onboarded: true,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       })
       .eq("id", user.id);
 

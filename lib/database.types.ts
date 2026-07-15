@@ -88,6 +88,7 @@ export type Database = {
           onboarded: boolean
           points: number
           streak: number
+          timezone: string
           updated_at: string
           user_name: string | null
           xp: number
@@ -104,6 +105,7 @@ export type Database = {
           onboarded?: boolean
           points?: number
           streak?: number
+          timezone?: string
           updated_at?: string
           user_name?: string | null
           xp?: number
@@ -120,6 +122,7 @@ export type Database = {
           onboarded?: boolean
           points?: number
           streak?: number
+          timezone?: string
           updated_at?: string
           user_name?: string | null
           xp?: number

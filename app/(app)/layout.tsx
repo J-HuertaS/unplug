@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { BottomNav } from "@/components/BottomNav";
 import { AppFrame } from "@/components/AppFrame";
 import { Sidebar } from "@/components/Sidebar";
+import { TimezoneSync } from "@/components/TimezoneSync";
 
 export default async function AppLayout({
   children,
@@ -18,7 +19,7 @@ export default async function AppLayout({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("onboarded")
+    .select("onboarded, timezone")
     .eq("id", user.id)
     .single();
 
@@ -26,6 +27,7 @@ export default async function AppLayout({
 
   return (
     <AppFrame wide>
+      <TimezoneSync userId={user.id} currentTimezone={profile.timezone} />
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex-1 overflow-y-auto">{children}</div>

@@ -11,6 +11,7 @@ export interface Profile {
   daily_goal_hours: number;
   companion_type: CompanionType;
   onboarded: boolean;
+  timezone: string;
   streak: number;
   points: number;
   last_outcome: LogOutcome | null;

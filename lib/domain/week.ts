@@ -2,30 +2,34 @@ import type { DailyLog } from "@/lib/types";
 
 const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export function toDateKey(d: Date): string {
-  return d.toISOString().slice(0, 10);
+/**
+ * "Today" as the user actually experiences it, not the server's clock.
+ * Next.js server components run on the server's system time (UTC on
+ * Vercel), which drifts from local calendar days by several hours for
+ * most users — a log made in the evening can land on the "wrong" date.
+ * Always resolve dates through the user's stored IANA timezone instead
+ * of `new Date().toISOString()`.
+ */
+export function localTodayKey(timezone: string): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: timezone }).format(new Date());
 }
 
-export function todayKey(): string {
-  return toDateKey(new Date());
-}
-
-/** Last `n` calendar days (oldest first) as YYYY-MM-DD keys, ending today. */
-export function lastNDayKeys(n: number): string[] {
+/** Last `n` calendar days (oldest first) as YYYY-MM-DD keys, ending today — in `timezone`. */
+export function lastNDayKeys(n: number, timezone: string): string[] {
+  const [y, m, d] = localTodayKey(timezone).split("-").map(Number);
   const out: string[] = [];
-  const now = new Date();
   for (let i = n - 1; i >= 0; i--) {
-    const d = new Date(now);
-    d.setDate(d.getDate() - i);
-    out.push(toDateKey(d));
+    // Date.UTC here is just calendar-day arithmetic on a Y/M/D triple, not a
+    // real moment in time — safe regardless of the server's own timezone.
+    out.push(new Date(Date.UTC(y, m - 1, d - i)).toISOString().slice(0, 10));
   }
   return out;
 }
 
 export function dayLabel(dateKey: string, isToday: boolean): string {
   if (isToday) return "Now";
-  const d = new Date(`${dateKey}T00:00:00`);
-  return DAY_LABELS[d.getDay()];
+  const d = new Date(`${dateKey}T00:00:00Z`);
+  return DAY_LABELS[d.getUTCDay()];
 }
 
 export interface DayEntry {
@@ -35,10 +39,10 @@ export interface DayEntry {
   log: DailyLog | null;
 }
 
-export function buildWeek(logs: DailyLog[], days = 7): DayEntry[] {
+export function buildWeek(logs: DailyLog[], timezone: string, days = 7): DayEntry[] {
   const byDate = new Map(logs.map((l) => [l.log_date, l]));
-  const today = todayKey();
-  return lastNDayKeys(days).map((dateKey) => ({
+  const today = localTodayKey(timezone);
+  return lastNDayKeys(days, timezone).map((dateKey) => ({
     dateKey,
     isToday: dateKey === today,
     label: dayLabel(dateKey, dateKey === today),

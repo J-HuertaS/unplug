@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { todayKey } from "@/lib/domain/week";
+import { localTodayKey } from "@/lib/domain/week";
 import type { DailyLog, Profile } from "@/lib/types";
 import { LogFlow } from "./LogFlow";
 
@@ -22,7 +22,7 @@ export default async function LogPage() {
     .from("daily_logs")
     .select("*")
     .eq("user_id", user.id)
-    .eq("log_date", todayKey())
+    .eq("log_date", localTodayKey(profile.timezone))
     .maybeSingle();
 
   return (
