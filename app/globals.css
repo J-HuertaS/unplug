@@ -6,7 +6,7 @@ body {
   color: #22332b;
   background: linear-gradient(180deg, #f1ecde 0%, #e7decb 100%);
   background-attachment: fixed;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 input[type="range"] {

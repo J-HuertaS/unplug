@@ -13,9 +13,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [checkEmail, setCheckEmail] = useState(false);
-  const [resending, setResending] = useState(false);
-  const [resent, setResent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,12 +23,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setLoading(false);
       if (error) {
-        setError(
-          error.message.toLowerCase().includes("email not confirmed")
-            ? "You haven't confirmed your email yet. Check your inbox, or resend the link below."
-            : error.message,
-        );
-        if (error.message.toLowerCase().includes("email not confirmed")) setCheckEmail(true);
+        setError(error.message);
         return;
       }
       router.push("/");
@@ -39,93 +31,15 @@ export default function LoginPage() {
       return;
     }
 
-    // Sign up. Pass emailRedirectTo explicitly so the confirmation link lands
-    // back on whatever domain the signup actually happened from (this env's
-    // origin), instead of solely relying on the Supabase dashboard's Site URL
-    // — that domain still needs to be in the project's Redirect URLs allowlist.
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/` },
-    });
+    const { error } = await supabase.auth.signUp({ email, password });
     setLoading(false);
     if (error) {
       setError(error.message);
       return;
     }
 
-    if (data.session) {
-      // Email confirmations are off (e.g. local dev) — already logged in.
-      router.push("/");
-      router.refresh();
-      return;
-    }
-
-    // Confirmations are on — no session yet, don't redirect. Tell the user what's next.
-    setCheckEmail(true);
-  }
-
-  async function handleResend() {
-    setResending(true);
-    setError(null);
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/` },
-    });
-    setResending(false);
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    setResent(true);
-  }
-
-  if (checkEmail) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 gap-8">
-        <div className="flex items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/media/unplug-logo.svg" alt="Unplug" className="w-9 h-9 rounded-[11px]" />
-          <div className="font-heading font-semibold text-[22px] text-green tracking-tight">Unplug</div>
-        </div>
-
-        <div className="w-full max-w-[360px] bg-white rounded-[26px] p-7 shadow-[0_16px_30px_-14px_rgba(30,90,68,0.25)] text-center">
-          <div className="text-4xl mb-3">📬</div>
-          <h1 className="font-heading font-semibold text-[22px] text-ink mb-2 tracking-tight">
-            Check your email
-          </h1>
-          <p className="text-ink-muted text-[15px] leading-relaxed mb-5">
-            We sent a confirmation link to <span className="font-bold text-ink">{email}</span>.
-            Click it to activate your account, then come back and sign in.
-          </p>
-
-          {error && <p className="text-terracotta text-sm font-bold mb-3">{error}</p>}
-          {resent && <p className="text-green text-sm font-bold mb-3">Sent again — check your inbox.</p>}
-
-          <Button
-            variant="secondary"
-            onClick={handleResend}
-            disabled={resending}
-            className="w-full text-base mb-3"
-          >
-            {resending ? "Sending…" : "Resend confirmation email"}
-          </Button>
-          <button
-            type="button"
-            onClick={() => {
-              setCheckEmail(false);
-              setMode("signin");
-              setResent(false);
-              setError(null);
-            }}
-            className="w-full text-center text-[13px] font-bold text-ink-soft cursor-pointer"
-          >
-            Back to sign in
-          </button>
-        </div>
-      </div>
-    );
+    router.push("/");
+    router.refresh();
   }
 
   return (

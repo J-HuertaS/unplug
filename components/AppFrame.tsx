@@ -12,9 +12,9 @@ export function AppFrame({
   wide?: boolean;
 }) {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center sm:bg-cream-shade sm:py-10 sm:px-4">
+    <div className="min-h-[100dvh] w-full flex items-center justify-center sm:bg-cream-shade sm:py-10 sm:px-4">
       <div
-        className={`w-full h-screen sm:h-[840px] sm:max-h-[92vh] max-w-[480px] bg-cream flex flex-col sm:rounded-[32px] sm:shadow-[0_30px_60px_-20px_rgba(30,50,40,0.35)] sm:border sm:border-black/5 overflow-hidden ${
+        className={`w-full h-[100dvh] sm:h-[840px] sm:max-h-[92dvh] max-w-[480px] bg-cream flex flex-col sm:rounded-[32px] sm:shadow-[0_30px_60px_-20px_rgba(30,50,40,0.35)] sm:border sm:border-black/5 overflow-hidden ${
           wide ? "lg:max-w-[1120px] lg:h-[840px] lg:flex-row" : ""
         }`}
       >
