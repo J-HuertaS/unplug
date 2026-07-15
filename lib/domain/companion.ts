@@ -70,7 +70,6 @@ export const STREAK_STATUS: Record<
   { text: string; color: string; arrow: string; bg: string }
 > = {
   beat: { text: "growing", color: "#1E5A44", arrow: "▲", bg: "#FCEEDD" },
-  hold: { text: "holding", color: "#C79A3E", arrow: "▬", bg: "#F4EEDD" },
   drop: { text: "slipped", color: "#B0857A", arrow: "▼", bg: "#EDEAE1" },
   none: { text: "just started", color: "#1E5A44", arrow: "▲", bg: "#FCEEDD" },
 };

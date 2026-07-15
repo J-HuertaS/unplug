@@ -1,6 +1,6 @@
 export type CompanionType = "plant" | "animal" | "character";
 export type Level = "baby" | "growing" | "mature";
-export type LogOutcome = "beat" | "hold" | "drop";
+export type LogOutcome = "beat" | "drop";
 export type HealthState = "healthy" | "neutral" | "critical";
 export type FoodKey = "apple" | "smoothie" | "cake";
 

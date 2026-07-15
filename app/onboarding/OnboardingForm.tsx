@@ -18,8 +18,7 @@ const COMPANION_OPTIONS: { type: CompanionType; sub: string }[] = [
 
 const RULES = [
   { color: "#1E5A44", text: "At or under it → streak grows, full points" },
-  { color: "#E6A94E", text: "Over, but under yesterday → streak holds" },
-  { color: "#C97C54", text: "Over & up from yesterday → fresh start" },
+  { color: "#C97C54", text: "Over it, even by a little → streak resets, fresh start" },
 ];
 
 export function OnboardingForm() {

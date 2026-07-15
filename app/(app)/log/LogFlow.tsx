@@ -29,7 +29,6 @@ function formatHours(hours: number): string {
 
 const OUTCOME_COPY: Record<LogOutcome, { title: string; bgTint: string }> = {
   beat: { title: "You beat your goal! 🎉", bgTint: "#E4F1E7" },
-  hold: { title: "Progress still counts 💪", bgTint: "#FBF0E0" },
   drop: { title: "Tomorrow's a fresh start", bgTint: "#F1ECE2" },
 };
 
@@ -38,14 +37,10 @@ function subCopy(
   nickname: string,
 ): string {
   const goalTxt = result.goal_hours.toFixed(1);
-  const saved = Math.max(0, result.yesterday_hours - result.hours_reported);
   if (result.outcome === "beat") {
-    return `Under ${goalTxt}h${saved > 0 ? ` and ${saved.toFixed(1)}h below yesterday` : ""}. Streak up to ${result.streak} — ${nickname} is thriving.`;
+    return `Under ${goalTxt}h. Streak up to ${result.streak} — ${nickname} is thriving.`;
   }
-  if (result.outcome === "hold") {
-    return `Over goal, but less than yesterday — your streak holds and you banked half points. Dip under ${goalTxt}h tomorrow to grow it.`;
-  }
-  return `More than yesterday today, so the streak stepped back to ${result.streak}. One good day turns it right around.`;
+  return `Over ${goalTxt}h today, so the streak stepped back to ${result.streak}. Dip under it tomorrow for a fresh start.`;
 }
 
 function ResultScreen({

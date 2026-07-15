@@ -9,22 +9,22 @@ Built with Next.js 14 (App Router), Supabase (Postgres + Auth), and Tailwind CSS
 
 ## How the mechanics work
 
-**Daily log** — each day you log your hours against your goal:
+**Daily log** — each day you log your hours against your goal. It's binary —
+only meeting the goal keeps the streak alive:
 
 | Condition | Streak | Points |
 |---|---|---|
 | Hours ≤ goal | +1 | Full (scaled by % under goal: 10%→10pts, 50%→50pts, 0h→150pts) |
-| Goal < hours < yesterday | unchanged | Half of the same scale |
-| Hours ≥ goal and ≥ yesterday | −1 (floor 0) | 0 |
+| Hours > goal | −1 (floor 0) | 0 |
 
 **Companion health** (day-to-day, recoverable) — healthy after a beat day,
-neutral after a hold or a single drop, critical after two+ drops in a row.
+neutral after a single drop, critical after two+ drops in a row.
 
 **Companion level** (permanent) — spend points in the food shop (Apple 30pts,
 Smoothie 80pts, Cake 150pts) to earn XP. Baby → Growing (200xp) → Mature (600xp).
 
-All of this logic lives in Postgres (`supabase/migrations/0001_init.sql`,
-functions `submit_daily_log` and `spend_points_on_food`) so it's atomic and
+All of this logic lives in Postgres (`supabase/migrations/`, functions
+`submit_daily_log` and `spend_points_on_food`) so it's atomic and
 authoritative — the client never computes streak/points itself.
 
 ## Local development
