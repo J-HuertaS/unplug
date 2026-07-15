@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import type { FoodKey } from "@/lib/types";
 
 const FOODS: { key: FoodKey; name: string; icon: string; cost: number; sub: string }[] = [
@@ -21,9 +23,17 @@ export function FoodShop({
   feedingKey: FoodKey | null;
   onFeed: (key: FoodKey) => void;
 }) {
-  if (!open) return null;
+  // Portal to document.body: an ancestor (the screen wrapper) uses an
+  // `animate-*` utility, and any `transform` on an ancestor — even the
+  // identity transform an animation settles on — creates a new containing
+  // block for `position: fixed` descendants. Without the portal, the
+  // backdrop ends up clipped to that ancestor's box instead of the viewport.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  return (
+  if (!open || !mounted) return null;
+
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 px-4 py-6"
       onClick={onClose}
@@ -79,6 +89,7 @@ export function FoodShop({
           })}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
